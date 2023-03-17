@@ -4,15 +4,12 @@ using UnityEngine;
 using System;
 
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IProgressUIBar
 {
 
-    public event EventHandler<OnProgressChangedEventArgs> OnProgressChange;
+    public event EventHandler<IProgressUIBar.OnProgressChangedEventArgs> OnProgressChange;
 
-    public class OnProgressChangedEventArgs : EventArgs
-    {
-        public float ProgressNormalized; 
-    }
+    
     public event EventHandler OnCut;
         
 
@@ -31,7 +28,7 @@ public class CuttingCounter : BaseCounter
                     CuttingProgress = 0;
 
                     CuttingRecipeSO CuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
-                    OnProgressChange?.Invoke(this, new OnProgressChangedEventArgs 
+                    OnProgressChange?.Invoke(this, new IProgressUIBar.OnProgressChangedEventArgs 
                     { 
                         ProgressNormalized = (float)CuttingProgress / CuttingRecipeSO.CuttingProgressMax
                     });
@@ -45,6 +42,16 @@ public class CuttingCounter : BaseCounter
             {
                 GetKitchenObject().SetKitchenObjectParent(Player);
             }
+            else
+            {
+                if (Player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+            }
         }
     }
 
@@ -55,7 +62,7 @@ public class CuttingCounter : BaseCounter
             CuttingProgress++;
             CuttingRecipeSO CuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
             OnCut?.Invoke(this, EventArgs.Empty);
-            OnProgressChange?.Invoke(this, new OnProgressChangedEventArgs
+            OnProgressChange?.Invoke(this, new IProgressUIBar.OnProgressChangedEventArgs
             {
                 ProgressNormalized = (float)CuttingProgress / CuttingRecipeSO.CuttingProgressMax
             });
