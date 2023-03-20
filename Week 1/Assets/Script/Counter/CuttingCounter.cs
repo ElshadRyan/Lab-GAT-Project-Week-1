@@ -7,6 +7,8 @@ using System;
 public class CuttingCounter : BaseCounter, IProgressUIBar
 {
 
+    public static event EventHandler OnAnyCut;
+
     public event EventHandler<IProgressUIBar.OnProgressChangedEventArgs> OnProgressChange;
 
     
@@ -62,6 +64,7 @@ public class CuttingCounter : BaseCounter, IProgressUIBar
             CuttingProgress++;
             CuttingRecipeSO CuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
             OnCut?.Invoke(this, EventArgs.Empty);
+            OnAnyCut.Invoke(this, EventArgs.Empty);
             OnProgressChange?.Invoke(this, new IProgressUIBar.OnProgressChangedEventArgs
             {
                 ProgressNormalized = (float)CuttingProgress / CuttingRecipeSO.CuttingProgressMax

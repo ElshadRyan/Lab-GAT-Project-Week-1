@@ -3,7 +3,8 @@ guid: d2c8dd65549ed494199c41f3ed860466
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - StoveSizzle: {fileID: 8300000, guid: 511c1cbfb8b48b64083aec78fe17115f, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

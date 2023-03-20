@@ -7,7 +7,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 {
 
     public static Player Instance { get; private set; }
-
+    public event EventHandler OnPickedSomething;
     public event EventHandler <OnSelectedCounterChangeEventArgs> OnSelectedCounterChange;
     public class OnSelectedCounterChangeEventArgs : EventArgs
     {
@@ -29,7 +29,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         Instance = this;
     }
-
+ 
     private void Start()
     {
         GameInput.OnInteractAction += GameInput_OnInteractAction;
@@ -154,6 +154,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.KitchenObject = kitchenObject;
+        if (kitchenObject != null)
+        {
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public KitchenObject GetKitchenObject()
